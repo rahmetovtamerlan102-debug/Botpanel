@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ bot.display_name }} — BotPanel{% endblock %}
+{% block content %}
+<div class="narrow">
+  <a class="back" href="/">← Назад к панели</a>
+  
+  <div class="pagehead" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <div class="eyebrow">BOT SETTINGS</div>
+      <h1>{{ bot.display_name }}</h1>
+      <p class="muted">@{{ bot.username }} · ID {{ bot.telegram_id }}</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a class="button" href="/bots/{{ bot.id }}/flow">Визуальный сценарий</a>
+    </div>
+  </div>
+
+  <div class="card formcard">
+    <h2>Базовые настройки</h2>
+    <form method="post" action="/bots/{{ bot.id }}/settings">
+      <label>Название в панели</label>
+      <input name="display_name" maxlength="150" required value="{{ bot.display_name }}">
+      <label>Ответ на /start</label>
+      <textarea name="welcome_text" maxlength="3500" rows="4" required>{{ bot.welcome_text }}</textarea>
+      <button class="button full" type="submit">Сохранить настройки</button>
+    </form>
+  </div>
+
+  <div class="card formcard" style="margin-top: 20px;">
+    <h2>Добавить команду</h2>
+    <form method="post" action="/bots/{{ bot.id }}/commands/add">
+      <label>Команда (например, /buy)</label>
+      <input name="command" placeholder="/buy" required>
+      <label>Текст ответа бота</label>
+      <textarea name="reply_text" rows="3" required placeholder="Что бот напишет?"></textarea>
+      <label>Текст инлайн-кнопки (необязательно)</label>
+      <input name="btn_text" placeholder="Например: Оставить заявку">
+      <label>Действие кнопки (если добавлена)</label>
+      <select name="btn_action">
+        <option value="">Без кнопки</option>
+        <option value="wait_for_input">Запросить ввод текста</option>
+        <option value="https://">Открыть ссылку</option>
+      </select>
+      <button class="button full" type="submit">Добавить команду</button>
+    </form>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <h2>Твои команды</h2>
+    <div class="command-list">
+      {% for cmd in commands %}
+        <div class="command-item">
+          <div class="command-name">{{ cmd.command }}</div>
+          <div class="command-reply">{{ cmd.reply_text }}</div>
+        </div>
+      {% else %}
+        <p class="muted" style="margin: 0;">Команд пока нет.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card dangerzone" style="margin-top: 20px;">
+    <h2>Отключить бота</h2>
+    <p class="muted">Удаляет подключение из BotPanel.</p>
+    <form method="post" action="/bots/{{ bot.id }}/remove" onsubmit="return confirm('Отключить?')">
+      <button class="danger" type="submit">Отключить</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
