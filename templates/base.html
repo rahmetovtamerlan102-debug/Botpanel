@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ru"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}BotPanel{% endblock %}</title>
+<link rel="stylesheet" href="/static/style.css">
+</head><body>
+<div class="shell">
+<header class="nav"><a class="logo" href="/">Bot<span>Panel</span></a><div class="navright">
+{% if user %}<span class="muted small">{{ user.email }}</span><form method="post" action="/logout"><button class="ghost" type="submit">Выйти</button></form>
+{% else %}<a class="ghost linkbtn" href="/login">Войти</a><a class="button smallbtn" href="/register">Создать аккаунт</a>{% endif %}
+</div></header>
+{% block content %}{% endblock %}
+<footer>BotPanel · MVP prototype · <a href="/privacy">Приватность</a></footer>
+</div></body></html>
