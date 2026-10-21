@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}{{ 'Регистрация' if mode == 'register' else 'Вход' }} — BotPanel{% endblock %}
+{% block content %}<section class="auth card"><div class="eyebrow">BOTPanel ACCOUNT</div><h1>{{ 'Создать аккаунт' if mode == 'register' else 'С возвращением' }}</h1>
+<p class="muted">Используй отдельный надёжный пароль.</p>
+<form method="post" action="/{{ mode }}">
+<label>Email</label><input name="email" type="email" autocomplete="email" maxlength="255" required>
+<label>Пароль</label><input name="password" type="password" minlength="10" autocomplete="{{ 'new-password' if mode == 'register' else 'current-password' }}" required>
+<button class="button full" type="submit">{{ 'Зарегистрироваться' if mode == 'register' else 'Войти' }}</button></form>
+<p class="muted small">{% if mode == 'register' %}Уже есть аккаунт? <a href="/login">Войти</a>{% else %}Нет аккаунта? <a href="/register">Создать</a>{% endif %}</p>
+</section>{% endblock %}
