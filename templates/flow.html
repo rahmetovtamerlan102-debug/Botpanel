@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}Сценарий — {{ bot.display_name }}{% endblock %}
+
+{% block content %}
+<style>
+  /* Стили для визуального редактора */
+  .flow-container {
+    background-color: #0b0f19;
+    background-image: radial-gradient(#1f2937 1px, transparent 1px);
+    background-size: 20px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 40px;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .flow-node {
+    background: #111827;
+    border: 1px solid #374151;
+    border-radius: 12px;
+    width: 240px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+    position: relative;
+  }
+  
+  .flow-node.start { border-color: #10b981; }
+  .flow-node.menu { border-color: #3b82f6; }
+
+  .node-header {
+    padding: 10px 14px;
+    border-bottom: 1px solid #374151;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .node-header::before {
+    content: '';
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #6b7280;
+  }
+  .flow-node.start .node-header::before { background: #10b981; }
+  .flow-node.menu .node-header::before { background: #3b82f6; }
+
+  .node-body {
+    padding: 14px;
+    font-size: 13px;
+    color: #9ca3af;
+  }
+
+  .node-btn {
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    color: #e5e7eb;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .node-btn:hover { background: #374151; }
+
+  /* Линии связи (упрощенно) */
+  .flow-arrow {
+    width: 40px;
+    height: 2px;
+    background: #4b5563;
+    position: relative;
+  }
+  .flow-arrow::after {
+    content: '→';
+    position: absolute;
+    right: -5px;
+    top: -12px;
+    color: #4b5563;
+    font-size: 18px;
+  }
+</style>
+
+<div class="pagehead">
+  <div>
+    <div class="eyebrow">FLOW BUILDER</div>
+    <h1>Сценарий бота</h1>
+  </div>
+  <a class="button" href="/bots/{{ bot.id }}">← Назад к настройкам</a>
+</div>
+
+<div class="flow-container">
+  
+  <!-- Стартовый блок -->
+  <div class="flow-node start">
+    <div class="node-header">Starting Step</div>
+    <div class="node-body">
+      <div style="font-size: 11px; color: #6b7280; margin-bottom: 4px;">Триггер: /start</div>
+      <p style="margin: 0;">{{ bot.welcome_text[:60] }}...</p>
+    </div>
+  </div>
+
+  <div class="flow-arrow"></div>
+
+  <!-- Главное меню (если есть команды) -->
+  <div class="flow-node menu">
+    <div class="node-header">Main Menu</div>
+    <div class="node-body">
+      <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px;">Выберите действие:</div>
+      
+      {% if commands %}
+        {% for cmd in commands %}
+          <div class="node-btn">
+            <span>{{ cmd.command }}</span>
+            <span>↗</span>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div style="color: #6b7280; font-size: 12px;">Нет добавленных команд</div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+
+<div class="card" style="margin-top: 20px;">
+  <h2>Как это работает</h2>
+  <p class="muted">
+    Пока это упрощенная визуализация твоих команд. Блок "Starting Step" — это ответ на команду /start. 
+    Блок "Main Menu" — это список команд, которые ты добавил в настройках. 
+    Чтобы добавить новую ветку, перейди в <a href="/bots/{{ bot.id }}">настройки</a> и добавь команду.
+  </p>
+</div>
+
+{% endblock %}
