@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <!-- Запрет зума на телефоне -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <title>{% block title %}BotPanel{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  
+  <style>
+    /* --- ЗАЩИТА ОТ КОПИРОВАНИЯ (CSS) --- */
+    * {
+      -webkit-user-select: none; /* Safari, Chrome */
+      -moz-user-select: none;    /* Firefox */
+      -ms-user-select: none;     /* IE/Edge */
+      user-select: none;
+      -webkit-touch-callout: none; /* Отключает меню при долгом тапе на iOS */
+    }
+    
+    /* Разрешаем выделять и копировать текст только в полях ввода */
+    input, textarea {
+      -webkit-user-select: text;
+      user-select: text;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="nav">
+      <a class="logo" href="/">Bot<span>Panel</span></a>
+      <div class="navright">
+        {% if user %}
+          <span class="user-email">{{ user.email }}</span>
+          <form method="post" action="/logout" style="margin:0;">
+            <button class="ghost smallbtn" type="submit">Выйти</button>
+          </form>
+        {% else %}
+          <a class="ghost linkbtn smallbtn" href="/login">Войти</a>
+          <a class="button smallbtn" href="/register">Создать аккаунт</a>
+        {% endif %}
+      </div>
+    </header>
+    
+    {% block content %}{% endblock %}
+    
+    <footer>
+      BotPanel · MVP prototype · <a href="/privacy">Приватность</a>
+    </footer>
+  </div>
+
+  <script>
+    // --- ЗАЩИТА ОТ КОПИРОВАНИЯ (JS) ---
+    
+    // 1. Отключаем контекстное меню (правая кнопка мыши / долгий тап)
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // 2. Отключаем горячие клавиши копирования, выделения и просмотра кода
+    document.addEventListener('keydown', function(e) {
+      if (
+        (e.ctrlKey || e.metaKey) && 
+        ['c', 'x', 'a', 'u', 's'].includes(e.key.toLowerCase())
+      ) {
+        e.preventDefault();
+        return false;
+      }
+      // Блокировка F12 (инструменты разработчика)
+      if (e.key === 'F12') {
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    // 3. Отключаем само событие copy
+    document.addEventListener('copy', event => {
+      // Разрешаем копирование, только если фокус в поле ввода
+      if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+        event.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>
