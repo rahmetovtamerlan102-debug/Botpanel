@@ -1,9 +1,0 @@
-{% extends "base.html" %}{% block title %}Панель — BotPanel{% endblock %}
-{% block content %}
-<div class="pagehead"><div><div class="eyebrow">WORKSPACE</div><h1>Твоя панель</h1><p class="muted">Управляй подключёнными ботами в одном месте.</p></div><a class="button" href="/bots/new">＋ Подключить бота</a></div>
-<div class="stats"><div class="card stat"><span class="muted">Подключено ботов</span><strong>{{ bots|length }}</strong></div><div class="card stat"><span class="muted">Статус проекта</span><strong class="green">MVP</strong></div><div class="card stat"><span class="muted">Режим</span><strong>Webhook</strong></div></div>
-<div class="sectionhead"><h2>Твои боты</h2><span class="muted small">{{ bots|length }} всего</span></div>
-{% if bots %}<div class="botlist">{% for bot in bots %}<a class="botrow card" href="/bots/{{ bot.id }}"><div class="botavatar">✦</div><div class="botmeta"><strong>{{ bot.display_name or bot.username }}</strong><span class="muted">@{{ bot.username }}</span></div><span class="status {{ 'on' if bot.active else 'off' }}">{{ 'Активен' if bot.active else 'Не активирован' }}</span><span class="arrow">→</span></a>{% endfor %}</div>
-{% else %}<div class="card empty"><div class="emptyicon">✦</div><h2>Пока нет подключённых ботов</h2><p class="muted">Создай бота через @BotFather в Telegram, затем подключи его токен здесь.</p><a class="button" href="/bots/new">Подключить первого бота</a></div>{% endif %}
-<div class="warning">Безопасность: не передавай токены посторонним. Если токен случайно утёк, отзови его через BotFather и создай новый.</div>
-{% endblock %}
